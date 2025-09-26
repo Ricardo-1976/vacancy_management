@@ -1,4 +1,4 @@
-package ao.com.ricardo.vacancy_management.modules.candidate;
+package ao.com.ricardo.vacancy_management.modules.candidate.entities;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ao.com.ricardo.vacancy_management.modules.candidate.CandidateEntity;
+import ao.com.ricardo.vacancy_management.modules.candidate.entities.CandidateEntity;
 import ao.com.ricardo.vacancy_management.modules.candidate.useCases.CreateCandidateUseCase;
 import jakarta.validation.Valid;
 
