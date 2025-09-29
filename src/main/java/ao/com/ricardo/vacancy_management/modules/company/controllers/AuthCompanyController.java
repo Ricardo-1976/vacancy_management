@@ -28,7 +28,7 @@ public class AuthCompanyController {
 			return ResponseEntity.ok().body(result);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-		}	
+		}
 	}
 	
 }
