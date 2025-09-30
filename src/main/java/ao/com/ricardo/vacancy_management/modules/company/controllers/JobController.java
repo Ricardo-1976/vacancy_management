@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ao.com.ricardo.vacancy_management.modules.company.dtos.CreateJobDTO;
 import ao.com.ricardo.vacancy_management.modules.company.entities.JobEntity;
 import ao.com.ricardo.vacancy_management.modules.company.useCases.CreateJobUseCase;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,10 +22,17 @@ public class JobController {
 	private CreateJobUseCase createJobUseCase;
 
 	@PostMapping("/")
-	public JobEntity create(@Valid @RequestBody JobEntity jobEntity, HttpServletRequest request) {
+	public JobEntity create(@Valid @RequestBody CreateJobDTO createJobDTO, HttpServletRequest request) {
 		var companyId = request.getAttribute("company_id");
 
-		jobEntity.setCompanyId(UUID.fromString(companyId.toString()));
+		//jobEntity.setCompanyId(UUID.fromString(companyId.toString()));
+
+		var jobEntity = JobEntity.builder()
+						.benefits(createJobDTO.getBenefits())
+						.description(createJobDTO.getDescription())
+						.level(createJobDTO.getLevel())
+						.companyId(UUID.fromString(companyId.toString()))
+						.build();
 
 		return this.createJobUseCase.execute(jobEntity);
 	}
