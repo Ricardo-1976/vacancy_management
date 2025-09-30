@@ -1,15 +1,17 @@
 package ao.com.ricardo.vacancy_management.modules.company.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ao.com.ricardo.vacancy_management.modules.company.entities.JobEntity;
 import ao.com.ricardo.vacancy_management.modules.company.useCases.CreateJobUseCase;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/job")
@@ -19,7 +21,11 @@ public class JobController {
 	private CreateJobUseCase createJobUseCase;
 
 	@PostMapping("/")
-	public JobEntity create(@Valid @RequestBody JobEntity jobEntity) {
+	public JobEntity create(@Valid @RequestBody JobEntity jobEntity, HttpServletRequest request) {
+		var companyId = request.getAttribute("company_id");
+
+		jobEntity.setCompanyId(UUID.fromString(companyId.toString()));
+
 		return this.createJobUseCase.execute(jobEntity);
 	}
 	
