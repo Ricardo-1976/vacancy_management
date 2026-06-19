@@ -22,8 +22,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/candidate")
 public class CandidateController {
 
-  @Autowired
-  private CreateCandidateUseCase createCandidateUseCase;
+  	@Autowired
+  	private CreateCandidateUseCase createCandidateUseCase;
 
 	@Autowired
 	private ProfileCandidateUseCase profileCandidateUseCase;

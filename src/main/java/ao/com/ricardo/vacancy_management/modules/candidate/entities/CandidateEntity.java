@@ -40,3 +40,4 @@ public class CandidateEntity {
   private LocalDateTime createdAt;
 
 }
+ 
