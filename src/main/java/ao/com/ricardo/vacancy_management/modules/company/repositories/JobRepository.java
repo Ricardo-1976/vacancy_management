@@ -9,5 +9,5 @@ import ao.com.ricardo.vacancy_management.modules.company.entities.JobEntity;
 
 public interface JobRepository extends JpaRepository<JobEntity, UUID> {
 	
-    List<JobEntity> findByDescriptionContaining(String filter);
+    List<JobEntity> findByDescriptionContainingIgnoreCase(String filter);
 }
