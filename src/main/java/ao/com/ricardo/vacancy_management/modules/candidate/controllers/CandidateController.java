@@ -17,18 +17,23 @@ import ao.com.ricardo.vacancy_management.modules.candidate.useCases.CreateCandid
 import ao.com.ricardo.vacancy_management.modules.candidate.useCases.ListAllJobsByFilterUseCase;
 import ao.com.ricardo.vacancy_management.modules.candidate.useCases.ProfileCandidateUseCase;
 import ao.com.ricardo.vacancy_management.modules.company.entities.JobEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestParam;
-
-
 
 @RestController
 @RequestMapping("/candidate")
 public class CandidateController {
 
-  	@Autowired
-  	private CreateCandidateUseCase createCandidateUseCase;
+	@Autowired
+	private CreateCandidateUseCase createCandidateUseCase;
 
 	@Autowired
 	private ProfileCandidateUseCase profileCandidateUseCase;
@@ -36,15 +41,15 @@ public class CandidateController {
 	@Autowired
 	private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
 
-  @PostMapping("/")
-  public ResponseEntity<Object> create( @Valid @RequestBody CandidateEntity candidateEntity) {
+	@PostMapping("/")
+	public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity) {
 		try {
 			var result = this.createCandidateUseCase.execute(candidateEntity);
 			return ResponseEntity.ok().body(result);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-  }
+	}
 
 	@GetMapping("/")
 	@PreAuthorize("hasRole('CANDIDATE')")
@@ -60,6 +65,13 @@ public class CandidateController {
 
 	@GetMapping("/jobs")
 	@PreAuthorize("hasRole('CANDIDATE')")
+	@Tag(name = "Candidate", description = "Endpoints for managing candidates")
+	@Operation(summary = "Find jobs by filter", description = "Find jobs by filter")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", content = {
+					@Content(array = @ArraySchema(schema = @Schema(implementation = JobEntity.class)))
+			})
+	})
 	public List<JobEntity> findJobByFilter(@RequestParam String filter) {
 		return this.listAllJobsByFilterUseCase.execute(filter);
 	}
