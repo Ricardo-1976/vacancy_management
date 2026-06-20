@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ao.com.ricardo.vacancy_management.modules.candidate.dto.ProfileCandidateRequestDTO;
 import ao.com.ricardo.vacancy_management.modules.candidate.entities.CandidateEntity;
 import ao.com.ricardo.vacancy_management.modules.candidate.useCases.CreateCandidateUseCase;
 import ao.com.ricardo.vacancy_management.modules.candidate.useCases.ListAllJobsByFilterUseCase;
@@ -54,6 +55,15 @@ public class CandidateController {
 
 	@GetMapping("/")
 	@PreAuthorize("hasRole('CANDIDATE')")
+	@Tag(name = "Candidate", description = "Endpoints for managing candidates")
+	@Operation(summary = "Get candidate profile", description = "Get candidate profile")
+	@SecurityRequirement(name = "jwt_auth")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", content = {
+					@Content(schema = @Schema(implementation = ProfileCandidateRequestDTO.class))
+			}),
+			@ApiResponse(responseCode = "400", description = "User not found")
+	})
 	public ResponseEntity<Object> get(HttpServletRequest request) {
 		var idCandidate = request.getAttribute("candidate_id");
 		try {
@@ -78,3 +88,4 @@ public class CandidateController {
 		return this.listAllJobsByFilterUseCase.execute(filter);
 	}
 }
+ 
