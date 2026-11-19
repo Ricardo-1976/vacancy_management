@@ -45,10 +45,13 @@ public class CandidateController {
 	private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
 
 	@PostMapping("/")
+	
+	@PreAuthorize("hasRole('CANDIDATE')")
+	@Tag (name = "Candidate", description = "Endpoints for managing candidates")
 	@Operation(summary = "Create a new candidate", description = "Create a new candidate")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {
-					@Content(schema = @Schema(implementation = CandidateEntity.class))
+					@Content(schema = @Schema(implementation = ProfileCandidateRequestDTO.class))
 			}),
 			@ApiResponse(responseCode = "400", description = "User already exists")
 	})
