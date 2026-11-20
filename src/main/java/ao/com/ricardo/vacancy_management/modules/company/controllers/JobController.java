@@ -12,6 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import ao.com.ricardo.vacancy_management.modules.company.dtos.CreateJobDTO;
 import ao.com.ricardo.vacancy_management.modules.company.entities.JobEntity;
 import ao.com.ricardo.vacancy_management.modules.company.useCases.CreateJobUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -24,6 +32,14 @@ public class JobController {
 
 	@PostMapping("/")
 	@PreAuthorize("hasRole('COMPANY')")
+	@Tag(name = "Job", description = "Endpoints for managing jobs")
+	@Operation(summary = "Create a new job", description = "Creates a new job for the authenticated company")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", content = {
+					@Content(schema = @Schema(implementation = JobEntity.class))
+			})
+	})
+	@SecurityRequirement(name = "jwt_auth")
 	public JobEntity create(@Valid @RequestBody CreateJobDTO createJobDTO, HttpServletRequest request) {
 		var companyId = request.getAttribute("company_id");
 
