@@ -11,24 +11,23 @@ import org.springframework.web.bind.annotation.RestController;
 import ao.com.ricardo.vacancy_management.modules.candidate.dto.AuthCandidateRequestDTO;
 import ao.com.ricardo.vacancy_management.modules.candidate.useCases.AuthCandidateUseCase;
 
-
 @RestController
 @RequestMapping("/candidate")
 public class AuthCandidateController {
-  
+
   @Autowired
   private AuthCandidateUseCase authCandidateUseCase;
 
   @PostMapping("/auth")
-  public ResponseEntity<Object> auth(@RequestBody AuthCandidateRequestDTO  authCandidateRequestDTO) {
+  public ResponseEntity<Object> auth(@RequestBody AuthCandidateRequestDTO authCandidateRequestDTO) {
 
     try {
-      
+
       var token = this.authCandidateUseCase.execute(authCandidateRequestDTO);
       return ResponseEntity.ok().body(token);
 
     } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
   }
 }
