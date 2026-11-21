@@ -15,8 +15,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import ao.com.ricardo.vacancy_management.exeptions.CandidateNotFoundException;
 import ao.com.ricardo.vacancy_management.exeptions.JobNotFoundException;
+import ao.com.ricardo.vacancy_management.modules.candidate.entities.ApplyJobEntity;
 import ao.com.ricardo.vacancy_management.modules.candidate.entities.CandidateEntity;
+import ao.com.ricardo.vacancy_management.modules.candidate.repositories.ApplyJobRepository;
 import ao.com.ricardo.vacancy_management.modules.candidate.repositories.CandidateRepository;
+import ao.com.ricardo.vacancy_management.modules.company.entities.JobEntity;
 import ao.com.ricardo.vacancy_management.modules.company.repositories.JobRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +33,9 @@ public class ApplyJobCandidateUseCaseTest {
 
     @Mock 
     private JobRepository jobRepository;
+
+    @Mock
+    private ApplyJobRepository applyJobRepository;
 
     @Test
     @DisplayName("should not be able to apply job with candidate not found")
@@ -59,5 +65,27 @@ public class ApplyJobCandidateUseCaseTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(JobNotFoundException.class);
         }
+    }
+
+    @Test
+    public void create_a_new_apply_job() {
+        var idCandidate = UUID.randomUUID();
+        var idJob = UUID.randomUUID();
+
+        var applyJob = ApplyJobEntity.builder().candidateId(idCandidate)
+                .jobId(idJob)
+                .build();
+
+        var applyJobCreated = ApplyJobEntity.builder().id(UUID.randomUUID()).build();
+
+        when(candidateRepository.findById(idCandidate)).thenReturn(Optional.of(new CandidateEntity()));
+        when(jobRepository.findById(idJob)).thenReturn(Optional.of(new JobEntity()));
+
+        when(applyJobRepository.save(applyJob)).thenReturn(applyJobCreated);
+
+        var result = applyJobCandidateUseCase.execute(idCandidate, idJob);
+
+        assertThat(result).hasFieldOrProperty("id");
+        assertThat(result.getId());
     }
 }
